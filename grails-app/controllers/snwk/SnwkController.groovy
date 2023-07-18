@@ -1,10 +1,10 @@
 package snwk
 
-import pogo.SnwkEvent
-
 class SnwkController {
 
     SnwkService snwkService
+
+    static allowedMethods = [index: "GET"]
 
     def index() {
 

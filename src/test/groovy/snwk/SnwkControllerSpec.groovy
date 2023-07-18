@@ -11,8 +11,19 @@ class SnwkControllerSpec extends Specification implements ControllerUnitTest<Snw
     def cleanup() {
     }
 
-    void "test something"() {
-        expect:"fix me"
-            true == false
+    void "Test the index action returns the correct model"() {
+        given: 'service results'
+        def event = [:]
+        event.key = 'value'
+        controller.snwkService = Mock(SnwkService) {
+            5 * getEvents(_, _) >> [event]
+        }
+
+        when: 'The index action is executed'
+        controller.index()
+
+        then: 'The model is correct'
+        model.allList
     }
+
 }

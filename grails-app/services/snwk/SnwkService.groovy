@@ -110,7 +110,7 @@ class SnwkService {
 
     }
 
-    String extractBetween(it, def from, def to) {
+    public static String extractBetween(it, def from, def to) {
         String result = ''
 
         def a = it.split(from)
@@ -126,7 +126,7 @@ class SnwkService {
         return result
     }
 
-    String extractDomare(it, def from, def to) {
+    public static String extractDomare(it, def from, def to) {
         String result = ''
 
         def a = it.split(from)
