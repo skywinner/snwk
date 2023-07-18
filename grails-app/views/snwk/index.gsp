@@ -3,7 +3,7 @@
 <html>
 <head>
     <meta name="layout" content="main"/>
-    <title>Welcome to SNWK Jesper</title>
+    <title>Welcome to SNWK extraction</title>
 </head>
 
 <body>

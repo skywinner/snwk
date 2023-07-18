@@ -8,7 +8,6 @@
 * compiled file, but it's generally better to create a new file per style scope.
 *
 *= require bootstrap
-*= require main
 *= require_self
 */
 
@@ -20,4 +19,20 @@ html, body {
     color: #343437;
     font-weight: normal;
     font-size: 12px;
+}
+
+.layout-invisible {
+    display: none;
+}
+
+.logo-container {
+    background: #111111 no-repeat 50% 30%;
+    margin-bottom: 10px;
+    color: white;
+    height: 100px;
+    text-align: center;
+}
+
+.logo {
+    max-height: 95px;
 }
