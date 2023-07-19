@@ -3,14 +3,35 @@
 <html>
 <head>
     <meta name="layout" content="main"/>
-    <title>Welcome to SNWK extraction</title>
+    <title>SNWK-tävlingar lista</title>
 </head>
 
 <body>
 
-<div class="svg" role="presentation">
-    <div class="logo-container">
-        <asset:image class="logo" src="snwk_logo.png"/>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-7 input-container">
+
+            <g:set var="moment" value="tsm"/>
+            <g:render template="/layouts/inputRow" bean="checkMap"/>
+
+            <g:set var="moment" value="behallare"/>
+            <g:render template="/layouts/inputRow" bean="checkMap"/>
+
+            <g:set var="moment" value="inomhus"/>
+            <g:render template="/layouts/inputRow" bean="checkMap"/>
+
+            <g:set var="moment" value="utomhus"/>
+            <g:render template="/layouts/inputRow" bean="checkMap"/>
+
+            <g:set var="moment" value="fordon"/>
+            <g:render template="/layouts/inputRow" bean="checkMap"/>
+
+        </div>
+
+        <div class="col logo-container">
+            <asset:image class="logo" src="snwk_logo.png"/>
+        </div>
     </div>
 </div>
 
