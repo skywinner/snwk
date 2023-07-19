@@ -13,19 +13,13 @@ import javax.annotation.PostConstruct
 class SnwkService {
 
     static final BASE_URL = 'https://snwktavling.se'
-    static final okLan = ['Värmlands län',
-                          'Västernorrlands län',
-                          'Dalarnas län',
-                          'Västmanlands län',
-                          'Uppsala län',
-                          'Stockholms län',
-                          'Örebro län',
-                          'Värmland',
+    static final okLan = ['Värmland',
                           'Västernorrland',
                           'Dalarna',
                           'Västmanland',
                           'Uppsala',
                           'Stockholm',
+                          'Gävleborg',
                           'Örebro']
 
     HttpClient httpClient
