@@ -34,6 +34,24 @@ function addClickListeners() {
         //console.log('clicked on klass: ' + this.name + ' is selected: ' + selected.toString());
         reLoadMe();
     });
+    $('.showCheck').on('click', function () {
+        const name = this.name;
+        const selected = $('#' + name).prop('checked');
+        const token = name.substring(5)
+        //console.log('clicked on show: ' + token + ' is selected: ' + selected);
+
+        let ajaxUrl = setShowUrl; //Set in the head of GSP
+        setSelected(ajaxUrl, token, selected);
+    });
+    $('.selectedCheck').on('click', function () {
+        const name = this.name;
+        const selected = $('#' + name).prop('checked');
+        const token = name.substring(9)
+        //console.log('clicked on selected: ' + token + ' is selected: ' + selected);
+
+        let ajaxUrl = setSelectedUrl; //Set in the head of GSP
+        setSelected(ajaxUrl, token, selected);
+    });
 }
 
 function reLoadMe() {
@@ -56,10 +74,31 @@ function addParams(params, moment) {
         momentParams += $('#' + moment + '_nw1').prop('checked') ? (momentParams.length > 0 ? ',1' : '1') : '';
         momentParams += $('#' + moment + '_nw2').prop('checked') ? (momentParams.length > 0 ? ',2' : '2') : '';
         momentParams += $('#' + moment + '_nw3').prop('checked') ? (momentParams.length > 0 ? ',3' : '3') : '';
+        momentParams += $('#' + moment + '_elit').prop('checked') ? (momentParams.length > 0 ? ',elit' : 'elit') : '';
         if (momentParams.length === 0) {
             momentParams = '1'
         }
         return (params.length > 0 ? params + '&' : '') + moment + '=' + momentParams;
     }
     return params;
+}
+
+function setSelected(ajaxUrl, token, selected) {
+    if (ajaxUrl) {
+        $.ajax({
+            url: ajaxUrl,
+            type: "PUT",
+            data: {
+                token: token,
+                selected: selected
+            },
+            success: function (resp) {
+                // Only act if something has been updated
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                console.log('Could not set Selected ' + xhr.status.toString());
+                //showError(xhr, ajaxOptions, thrownError);
+            }
+        });
+    }
 }

@@ -35,9 +35,9 @@ html, body {
 }
 
 .logo-container {
-    background-color: #111111;
-    margin-bottom: 10px;
-    color: white;
+    background-color: #FFFFFF;
+    margin-top: 5px;
+    color: black;
     height: 100px;
     text-align: center;
 }

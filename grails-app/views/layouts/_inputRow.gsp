@@ -13,5 +13,7 @@
                 code="nose.work.moment.two.label" default="two"/>
         <g:checkBox class="klassCheck" checked="${checkMap[moment+'_nw3']}" name="${moment}_nw3"/>&nbsp;<g:message
                 code="nose.work.moment.three.label" default="three"/>
+        <g:checkBox class="klassCheck" checked="${checkMap[moment+'_elit']}" name="${moment}_elit"/>&nbsp;<g:message
+                code="nose.work.moment.elit.label" default="elit"/>
     </div>
 </div>

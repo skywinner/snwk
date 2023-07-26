@@ -5,7 +5,6 @@ import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.client.HttpClient
 import io.micronaut.http.uri.UriBuilder
-import pogo.SnwkEvent
 
 import javax.annotation.PostConstruct
 
@@ -44,52 +43,64 @@ class SnwkService {
             def eventList = html.split('<li ')
             eventList.eachWithIndex { it, idx ->
                 if (idx != 0) {
-                    SnwkEvent oneEvent = new SnwkEvent()
-                    oneEvent.klass = klass
-                    oneEvent.moment = moment
 
-                    // Datum
-                    oneEvent.datum = extractBetween(it, '<div style="float: left;"><p class="style2"><strong><span>', '</span>')
+                    // Token
+                    String token = extractBetween(it, 'token=', "'")
 
-                    // Plats
-                    oneEvent.plats = extractBetween(it, '<span style="margin: 0 15px;">', '</span>')
-
-                    // Arrangör
-                    oneEvent.organisation = extractBetween(it, 'Arrangerande klubb:', '</div>')
-
-                    // Domare
-                    oneEvent.domare = extractDomare(it, 'Domare: ', '<br')
-
-                    // Anmälan öppnar
-                    oneEvent.anmalanStart = extractBetween(it, 'Anmälan är öppen från ', ' till ')
-
-                    // Anmälan stänger
-                    oneEvent.anmalanSlut = extractBetween(it, ' till och med ', '</p>')
-
-                    // Typ av anmälan
-                    oneEvent.anmalanTyp = extractBetween(it, '<p class="style4">', '</p>')
-                    if (oneEvent.anmalanTyp.startsWith('Lottad')) {
-                        oneEvent.anmalanTyp = SnwkEvent.ANMALAN_TYP_LOTTNING
-                    } else {
-                        oneEvent.anmalanTyp = SnwkEvent.ANMALAN_TYP_TURORDNING
+                    // Store or update values - id is TOKEN
+                    SnwkEvent se = SnwkEvent.findByToken(token)
+                    if (!se) {
+                        se = new SnwkEvent(token: token)
                     }
 
+                    // Klass/Moment (from input)
+                    se.klass = klass
+                    se.moment = moment
+
+                    // Datum
+                    se.datum = extractBetween(it, '<div style="float: left;"><p class="style2"><strong><span>', '</span>')
+
+                    // Plats
+                    se.plats = extractBetween(it, '<span style="margin: 0 15px;">', '</span>')
+
+                    // Arrangör
+                    se.organisation = extractBetween(it, 'Arrangerande klubb:', '</div>')
+
+                    // Domare
+                    se.domare = extractDomare(it, 'Domare: ', '<br')
+
+                    // Anmälan öppnar
+                    se.anmalanStart = extractBetween(it, 'Anmälan är öppen från ', ' till ')
+
+                    // Anmälan stänger
+                    se.anmalanSlut = extractBetween(it, ' till och med ', '</p>')
+
+                    // Typ av anmälan
+                    String anmalanTyp = extractBetween(it, '<p class="style4">', '</p>')
+                    if (anmalanTyp.startsWith('Lottad')) {
+                        anmalanTyp = SnwkEvent.ANMALAN_TYP_LOTTNING
+                    } else {
+                        anmalanTyp = SnwkEvent.ANMALAN_TYP_TURORDNING
+                    }
+                    se.anmalanTyp = anmalanTyp
+
                     // Länk till anmälan
-                    oneEvent.anmalanLink = ''
-                    if (oneEvent.anmalanOpen) {
-                        oneEvent.anmalanLink = BASE_URL + '/' + extractBetween(it, '<button class="anmalbutton" onclick="location=\'', "'")
+                    se.anmalanLink = null
+                    if (se.isAnmalanOpen) {
+                        se.anmalanLink = BASE_URL + '/' + extractBetween(it, '<button class="anmalbutton" onclick="location=\'', "'")
                     }
 
                     // Län
-                    oneEvent.lan = extractBetween(it, '<div style="clear: both; float: left; width: 100%;"><p>', '</p>')
-                    if (oneEvent.lan.length() > 4) {
-                        oneEvent.lan = oneEvent.lan.split('s län')[0]
-                        oneEvent.lan = oneEvent.lan.split(' län')[0]
+                    se.lan = extractBetween(it, '<div style="clear: both; float: left; width: 100%;"><p>', '</p>')
+                    if (se.lan.length() > 4) {
+                        se.lan = se.lan.split('s län')[0]
+                        se.lan = se.lan.split(' län')[0]
+                    } else {
+                        se.lan = '????'
                     }
-                    oneEvent.lanIsGreen = okLan.contains(oneEvent.lan)
 
-
-                    list.push(oneEvent)
+                    se.save failOnError: true
+                    list.push(se)
                 }
             }
 
