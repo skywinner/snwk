@@ -7,6 +7,7 @@
     <script>
         let setShowUrl = "${g.createLink(absolute: true, controller: 'snwk', action: 'updateShow')}"
         let setSelectedUrl = "${g.createLink(absolute: true, controller: 'snwk', action: 'updateSelected')}"
+        let updateProfileUrl = "${g.createLink(absolute: true, controller: 'snwk', action: 'updateProfile')}"
     </script>
 </head>
 
@@ -15,6 +16,13 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col input-container">
+            <div>
+                <g:select id="profile" name="profile" from="${profileList*.profileName}"
+                          style="width: 100px;"
+                          keys="${profileList*.profileName}"
+                          value="${profileName}"
+                          noSelection="${['null': 'Välj en profil...']}"/>
+            </div>
 
             <g:set var="moment" value="tsm"/>
             <g:render template="/layouts/inputRow" bean="checkMap"/>
@@ -63,8 +71,10 @@
             <tr>
 
                 <td>${row.datum}</td>
-                <td><g:checkBox class="showCheck" name="show_${row.token}" id="show_${row.token}" value="${row.show}"/></td>
-                <td><g:checkBox class="selectedCheck" name="selected_${row.token}" id="selected_${row.token}" value="${row.selected}"/></td>
+                <td><g:checkBox class="showCheck" name="show_${row.token}" id="show_${row.token}"
+                                value="${row.show}"/></td>
+                <td><g:checkBox class="selectedCheck" name="selected_${row.token}" id="selected_${row.token}"
+                                value="${row.selected}"/></td>
                 <td class="${row.isLanGreen ? 'table-danger' : ''}">${row.lanPlatsText}</td>
                 <td class="d-none d-sm-block">${row.organisation} - ${row.domare}</td>
                 <td>${row.klass}</td>

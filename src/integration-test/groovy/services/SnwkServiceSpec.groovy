@@ -2,15 +2,90 @@ package services
 
 import grails.gorm.transactions.Rollback
 import grails.testing.mixin.integration.Integration
-import grails.testing.services.ServiceUnitTest
+import snwk.LocalProfile
+import snwk.SnwkEvent
 import snwk.SnwkService
 import spock.lang.Specification
+import util.StringUtil
 
 @Integration
 @Rollback
 class SnwkServiceSpec extends Specification {
 
     SnwkService snwkService
+
+    private LocalProfile setupData() {
+        new SnwkEvent(token: StringUtil.randomString(12),
+                klass: 'NW3', moment: 'tsm',
+                datum: '2023-01-01').save(failOnError: true)
+        new SnwkEvent(token: StringUtil.randomString(12),
+                klass: 'NW3', moment: 'tsm',
+                datum: '2023-01-02').save(failOnError: true)
+        new SnwkEvent(token: StringUtil.randomString(12),
+                klass: 'NW3', moment: 'tsm',
+                datum: '2023-01-03').save(failOnError: true)
+
+        new LocalProfile(profileName: 'user1', profileSettings: '{"tsm_elit": true}').save(failOnError: true)
+        return new LocalProfile(profileName: 'user2', profileSettings: '{"tsm_elit": false}').save(failOnError: true, flush: true)
+    }
+
+    void "listLocalProfiles"() {
+        given: 'some data'
+        LocalProfile lp = setupData()
+
+        when: 'getting a list of profiles'
+        def list = snwkService.listLocalProfiles()
+
+        then: 'the list contains all profiles'
+        list.size() == 4 //2 are added in BootStrap
+        list.contains(lp)
+    }
+
+    void "getLocalProfileByName"() {
+        given: 'some data'
+        LocalProfile lp = setupData()
+
+        when: 'getting a profile'
+        LocalProfile localProfile = snwkService.getLocalProfileByName(lp.profileName)
+
+        then: 'the response is the correct profile'
+        localProfile == lp
+    }
+
+    void "fail getLocalProfileByName"() {
+        given: 'some data'
+        LocalProfile lp = setupData()
+
+        when: 'getting a profile'
+        LocalProfile localProfile = snwkService.getLocalProfileByName(lp.profileName + 'doestNotExist')
+
+        then: 'the response is not a profile'
+        !localProfile
+    }
+
+    void "getSnwkEventByToken"() {
+        given: 'some data'
+        LocalProfile lp = setupData()
+        SnwkEvent se = SnwkEvent.first()
+
+        when: 'getting an event'
+        SnwkEvent snwkEvent = snwkService.getSnwkEventByToken(se.token)
+
+        then: 'the response is the correct event'
+        snwkEvent == se
+    }
+
+    void "fail getSnwkEventByToken"() {
+        given: 'some data'
+        LocalProfile lp = setupData()
+        SnwkEvent se = SnwkEvent.first()
+
+        when: 'getting an event'
+        SnwkEvent snwkEvent = snwkService.getSnwkEventByToken(se.token + 'doestNotExist')
+
+        then: 'the response is not an event'
+        !snwkEvent
+    }
 
     void "test extraction of Plats"() {
         given: 'html text'

@@ -61,7 +61,7 @@ class SnwkEvent {
     }
 
     static constraints = {
-        token blank: false, size: 1..254
+        token blank: false, size: 1..254, unique: true
         datum nullable: true, blank: false
         plats nullable: true, blank: false
         organisation nullable: true, blank: false

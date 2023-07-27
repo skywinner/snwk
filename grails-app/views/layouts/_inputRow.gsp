@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-4">
         <div class="checkBox">
-            <g:checkBox class="momentCheck" checked="${checkMap[moment]}" name="${moment}"/>&nbsp;<g:message
+            <g:checkBox disabled="true" class="momentCheck" checked="${checkMap[moment]}" name="${moment}"/>&nbsp;<g:message
                     code="nose.work.class.${moment}.label" default="${moment}"/>
         </div>
     </div>

@@ -8,17 +8,16 @@ class SnwkControllerSpec extends Specification implements ControllerUnitTest<Snw
     def populateValidParams(params) {
         assert params != null
 
-        params["tsm"] = "3"
-        params["fordon"] = "1"
-
+        params["profile"] = "username"
     }
 
     void "Test the index action returns the correct model"() {
         given: 'service results'
-        def event = [:]
-        event.key = 'value'
+        def aList = [new SnwkEvent(datum: '2023-01-01')]
         controller.snwkService = Mock(SnwkService) {
-            2 * getEvents(_, _) >> [event]
+            1 * listLocalProfiles() >> ['user1', 'user2']
+            1 * getLocalProfileByName(_) >> new LocalProfile(profileName: 'username', profileSettings: '{"tsm_elit": true}')
+            1 * getEvents(_, _) >> aList
         }
 
         when: 'The index action is executed'
@@ -28,11 +27,10 @@ class SnwkControllerSpec extends Specification implements ControllerUnitTest<Snw
         then: 'The models are correct'
         model.allList
         model.checkMap
-        model.checkMap.tsm
-        model.checkMap.fordon
-        !model.checkMap.inomhus
-        !model.checkMap.utomhus
-        !model.checkMap.behallare
+        model.profileList
+        model.profileName
+        model.checkMap.tsm_elit
+        !model.checkMap.inomhus_nw1
     }
 
 }

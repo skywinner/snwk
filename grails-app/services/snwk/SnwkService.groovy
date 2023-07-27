@@ -29,6 +29,20 @@ class SnwkService {
         httpClient = HttpClient.create(baseUrl.toURL())
     }
 
+    @Transactional(readOnly = true)
+    LocalProfile getLocalProfileByName(String profileName) {
+        return LocalProfile.findByProfileName(profileName)
+    }
+    @Transactional(readOnly = true)
+    ArrayList<LocalProfile> listLocalProfiles() {
+        return LocalProfile.list().sort { it.profileName }
+    }
+
+    @Transactional(readOnly = true)
+    SnwkEvent getSnwkEventByToken(String token) {
+        return SnwkEvent.findByToken(token)
+    }
+
     def getEvents(String klass, String moment) {
         def list = []
 
@@ -48,7 +62,7 @@ class SnwkService {
                     String token = extractBetween(it, 'token=', "'")
 
                     // Store or update values - id is TOKEN
-                    SnwkEvent se = SnwkEvent.findByToken(token)
+                    SnwkEvent se = getSnwkEventByToken(token)
                     if (!se) {
                         se = new SnwkEvent(token: token)
                     }
@@ -105,8 +119,7 @@ class SnwkService {
             }
 
 
-        }
-        catch (Throwable e) {
+        } catch (Throwable e) {
             log.error('', e)
         }
 
@@ -115,7 +128,7 @@ class SnwkService {
 
     }
 
-    public static String extractBetween(it, def from, def to) {
+    static String extractBetween(it, def from, def to) {
         String result = ''
 
         def a = it.split(from)
@@ -131,7 +144,7 @@ class SnwkService {
         return result
     }
 
-    public static String extractDomare(it, def from, def to) {
+    static String extractDomare(it, def from, def to) {
         String result = ''
 
         def a = it.split(from)
