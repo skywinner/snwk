@@ -11,36 +11,47 @@ class SnwkController {
 
     def index() {
 
-        def allList = []
         def checkMap = [:]
         def profileList = snwkService.listLocalProfiles()
         String profileName = null
+        LocalProfile localProfile = null
 
         if (params.profile) {
             profileName = params.profile.toString()
-            LocalProfile localProfile = snwkService.getLocalProfileByName(profileName)
+            localProfile = snwkService.getLocalProfileByName(profileName)
             if (localProfile) {
                 profileName = localProfile.profileName
                 checkMap = localProfile.checkMap
             }
         }
-        checkMap.each {
-            if (!['tsm', 'inomhus', 'utomhus', 'behallare', 'fordon'].contains(it.key)) {
-                if (it.value) {
-                    String moment = it.key.toString().split('_')[0]
-                    String klass = it.key.toString().split('_')[1].toUpperCase()
-                    allList += snwkService.getEvents(klass, moment)
-                }
-            }
-        }
 
-        allList = allList.sort { it.datum }
+        def allList = mapToList(localProfile)
 
         respond allList, model: [allList    : allList,
                                  checkMap   : checkMap,
                                  profileList: profileList,
                                  profileName: profileName]
 
+    }
+
+    private ArrayList mapToList(LocalProfile localProfile) {
+        ArrayList allList = []
+
+        if (localProfile) {
+            localProfile.checkMap.each {
+                if (!['tsm', 'inomhus', 'utomhus', 'behallare', 'fordon', 'showAll', 'hideSelected'].contains(it.key)) {
+                    if (it.value) {
+                        String moment = it.key.toString().split('_')[0]
+                        String klass = it.key.toString().split('_')[1].toUpperCase()
+                        allList += snwkService.getEvents(localProfile, klass, moment)
+                    }
+                }
+            }
+
+            allList = allList.sort { it.datum }
+        }
+
+        return allList
     }
 
     // AJAX action, set new parameters for profile
@@ -59,7 +70,8 @@ class SnwkController {
             localProfile.profileSettings = (checkMap as JSON).toString()
             localProfile.save failOnError: true, flush: true
 
-            //TODO: render partial page
+            def allList = mapToList(localProfile)
+            render(template: '/layouts/index_table', model: [allList: allList])
 
         } else {
             // Respond with error
@@ -70,14 +82,22 @@ class SnwkController {
     // AJAX action, set selection of SHOW
     @Transactional
     def updateShow() {
+        String profileName = params.profileName
+        LocalProfile localProfile = snwkService.getLocalProfileByName(profileName)
         String token = params.token
-        SnwkEvent snwkEvent = snwkService.getSnwkEventByToken(token)
+        SnwkEvent snwkEvent = snwkService.getSnwkEventByProfileAndToken(localProfile, token)
 
         boolean show = Boolean.parseBoolean(params.selected)
         if (snwkEvent) {
             snwkEvent.show = false
             snwkEvent.show = show
             snwkEvent.save failOnError: true, flush: true
+
+            if (localProfile) {
+                def allList = mapToList(localProfile)
+                render(template: '/layouts/index_table', model: [allList: allList])
+            }
+
         } else {
             // Respond with error
             render(status: 422, text: 'Could not find event')
@@ -87,14 +107,22 @@ class SnwkController {
     // AJAX action, set selection of SHOW
     @Transactional
     def updateSelected() {
+        String profileName = params.profileName
+        LocalProfile localProfile = snwkService.getLocalProfileByName(profileName)
         String token = params.token
-        SnwkEvent snwkEvent = snwkService.getSnwkEventByToken(token)
+        SnwkEvent snwkEvent = snwkService.getSnwkEventByProfileAndToken(localProfile, token)
 
         boolean selected = Boolean.parseBoolean(params.selected)
         if (snwkEvent) {
             snwkEvent.selected = false
             snwkEvent.selected = selected
             snwkEvent.save failOnError: true, flush: true
+
+            if (localProfile) {
+                def allList = mapToList(localProfile)
+                render(template: '/layouts/index_table', model: [allList: allList])
+            }
+
         } else {
             // Respond with error
             render(status: 422, text: 'Could not find event')

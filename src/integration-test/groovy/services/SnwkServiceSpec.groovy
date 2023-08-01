@@ -15,18 +15,19 @@ class SnwkServiceSpec extends Specification {
     SnwkService snwkService
 
     private LocalProfile setupData() {
-        new SnwkEvent(token: StringUtil.randomString(12),
+        new LocalProfile(profileName: 'user1', profileSettings: '{"tsm_elit": true}').save(failOnError: true)
+        LocalProfile lp = new LocalProfile(profileName: 'user2', profileSettings: '{"tsm_elit": false}').save(failOnError: true, flush: true)
+        new SnwkEvent(localProfile:lp, token: StringUtil.randomString(12),
                 klass: 'NW3', moment: 'tsm',
                 datum: '2023-01-01').save(failOnError: true)
-        new SnwkEvent(token: StringUtil.randomString(12),
+        new SnwkEvent(localProfile:lp,token: StringUtil.randomString(12),
                 klass: 'NW3', moment: 'tsm',
                 datum: '2023-01-02').save(failOnError: true)
-        new SnwkEvent(token: StringUtil.randomString(12),
+        new SnwkEvent(localProfile:lp,token: StringUtil.randomString(12),
                 klass: 'NW3', moment: 'tsm',
                 datum: '2023-01-03').save(failOnError: true)
 
-        new LocalProfile(profileName: 'user1', profileSettings: '{"tsm_elit": true}').save(failOnError: true)
-        return new LocalProfile(profileName: 'user2', profileSettings: '{"tsm_elit": false}').save(failOnError: true, flush: true)
+        return lp
     }
 
     void "listLocalProfiles"() {
@@ -69,7 +70,7 @@ class SnwkServiceSpec extends Specification {
         SnwkEvent se = SnwkEvent.first()
 
         when: 'getting an event'
-        SnwkEvent snwkEvent = snwkService.getSnwkEventByToken(se.token)
+        SnwkEvent snwkEvent = snwkService.getSnwkEventByProfileAndToken(lp,se.token)
 
         then: 'the response is the correct event'
         snwkEvent == se
@@ -81,7 +82,7 @@ class SnwkServiceSpec extends Specification {
         SnwkEvent se = SnwkEvent.first()
 
         when: 'getting an event'
-        SnwkEvent snwkEvent = snwkService.getSnwkEventByToken(se.token + 'doestNotExist')
+        SnwkEvent snwkEvent = snwkService.getSnwkEventByProfileAndToken(lp,se.token + 'doestNotExist')
 
         then: 'the response is not an event'
         !snwkEvent

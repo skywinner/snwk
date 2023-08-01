@@ -33,17 +33,20 @@ class SnwkService {
     LocalProfile getLocalProfileByName(String profileName) {
         return LocalProfile.findByProfileName(profileName)
     }
+
     @Transactional(readOnly = true)
     ArrayList<LocalProfile> listLocalProfiles() {
         return LocalProfile.list().sort { it.profileName }
     }
 
     @Transactional(readOnly = true)
-    SnwkEvent getSnwkEventByToken(String token) {
-        return SnwkEvent.findByToken(token)
+    SnwkEvent getSnwkEventByProfileAndToken(LocalProfile localProfile, String token) {
+        return SnwkEvent.findByLocalProfileAndToken(localProfile, token)
     }
 
-    def getEvents(String klass, String moment) {
+    def getEvents(LocalProfile localProfile, String klass, String moment) {
+        boolean showAll = localProfile.checkMap['showAll'] ?: false
+        boolean hideSelected = localProfile.checkMap['hideSelected'] ?: false
         def list = []
 
         try {
@@ -61,10 +64,11 @@ class SnwkService {
                     // Token
                     String token = extractBetween(it, 'token=', "'")
 
-                    // Store or update values - id is TOKEN
-                    SnwkEvent se = getSnwkEventByToken(token)
+                    // Store or update values - id is PROFILE and TOKEN
+                    SnwkEvent se = getSnwkEventByProfileAndToken(localProfile, token)
                     if (!se) {
-                        se = new SnwkEvent(token: token)
+                        se = new SnwkEvent(localProfile: localProfile,
+                                token: token)
                     }
 
                     // Klass/Moment (from input)
@@ -114,7 +118,10 @@ class SnwkService {
                     }
 
                     se.save failOnError: true
-                    list.push(se)
+
+                    if ((se.show || showAll) && (!se.selected || !hideSelected)) {
+                        list.push(se)
+                    }
                 }
             }
 

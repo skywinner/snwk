@@ -37,6 +37,15 @@ function addClickListeners() {
         updateProfile(ajaxUrl, profileName, moment, klass, selected);
     });
 
+    $('.settingCheck').on('click', function () {
+        const name = this.name;
+        const selected = $('#' + name).prop('checked');
+        const profileName = $('#profile').val();
+
+        let ajaxUrl = updateProfileUrl; //Set in the head of GSP
+        updateProfile(ajaxUrl, profileName, '', name, selected);
+    });
+
     $('.showCheck').on('click', function () {
         const name = this.name;
         const selected = $('#' + name).prop('checked');
@@ -59,7 +68,6 @@ function addClickListeners() {
 
     $('#profile').on('change', function () {
         const profileName = $('#profile').val();
-        enableDisableSelections(profileName);
         reLoadMeWithProfile(profileName);
     });
 }
@@ -67,13 +75,18 @@ function addClickListeners() {
 function enableDisableSelections(profileName) {
     if (profileName.toString() === 'null') {
         console.log('DISABLING selections');
-        $('.momentCheck').prop('disabled', true);
-        $('.klassCheck').prop('disabled', true);
+        setDisabled(true);
     } else {
         console.log('enabling selections for ' + profileName);
-        $('.momentCheck').prop('disabled', false);
-        $('.klassCheck').prop('disabled', false);
+        setDisabled(false);
     }
+}
+
+function setDisabled(trueFalse) {
+    $('.klassCheck').prop('disabled', trueFalse);
+    $('.settingCheck').prop('disabled', trueFalse);
+    $('.showCheck').prop('disabled', trueFalse);
+    $('.selectedCheck').prop('disabled', trueFalse);
 }
 
 function reLoadMeWithProfile(profileName) {
@@ -84,46 +97,29 @@ function reLoadMeWithProfile(profileName) {
         urlParams = '?profile=' + profileName;
     }
 
+    setDisabled(true);
     window.location.href = (url + urlParams).trim();
-}
-
-function reLoadMe() {
-    const url = window.location.href.split('?')[0];
-
-    let urlParams = '';
-    urlParams = addParams(urlParams, 'tsm');
-    urlParams = addParams(urlParams, 'behallare');
-    urlParams = addParams(urlParams, 'inomhus');
-    urlParams = addParams(urlParams, 'utomhus');
-    urlParams = addParams(urlParams, 'fordon');
-
-    window.location.href = url + '?' + urlParams;
-}
-
-function addParams(params, moment) {
-    const momentIsChecked = $('#' + moment).prop('checked');
-    let momentParams = '';
-    if (momentIsChecked) {
-        momentParams += $('#' + moment + '_nw1').prop('checked') ? (momentParams.length > 0 ? ',1' : '1') : '';
-        momentParams += $('#' + moment + '_nw2').prop('checked') ? (momentParams.length > 0 ? ',2' : '2') : '';
-        momentParams += $('#' + moment + '_nw3').prop('checked') ? (momentParams.length > 0 ? ',3' : '3') : '';
-        momentParams += $('#' + moment + '_elit').prop('checked') ? (momentParams.length > 0 ? ',elit' : 'elit') : '';
-        return (params.length > 0 ? params + '&' : '') + moment + '=' + momentParams;
-    }
-    return params;
 }
 
 function setSelected(ajaxUrl, token, selected) {
     if (ajaxUrl) {
+        setDisabled(true);
+        const profileName = $('#profile').val();
         $.ajax({
             url: ajaxUrl,
             type: "PUT",
             data: {
                 token: token,
-                selected: selected
+                selected: selected,
+                profileName: profileName
             },
             success: function (resp) {
                 // Only act if something has been updated
+                if (resp.length > 0) {
+                    $("#content").html(resp);
+                }
+                setDisabled(false);
+                addClickListeners();
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 console.log('Could not set Selected ' + xhr.status.toString());
@@ -135,6 +131,7 @@ function setSelected(ajaxUrl, token, selected) {
 
 function updateProfile(ajaxUrl, profileName, moment, klass, selected) {
     if (ajaxUrl) {
+        setDisabled(true);
         $.ajax({
             url: ajaxUrl,
             type: "PUT",
@@ -146,6 +143,11 @@ function updateProfile(ajaxUrl, profileName, moment, klass, selected) {
             },
             success: function (resp) {
                 // Only act if something has been updated
+                if (resp.length > 0) {
+                    $("#content").html(resp);
+                }
+                setDisabled(false);
+                addClickListeners();
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 console.log('Could not update Profile ' + xhr.status.toString());

@@ -36,6 +36,8 @@ class SnwkEvent {
     Date dateCreated = new Date()
     Date lastUpdated
 
+    static belongsTo = [localProfile: LocalProfile]
+
     String getAnmalanText() {
         return "${this.anmalanStart} till ${this.anmalanSlut} (${this.anmalanTyp})"
     }
@@ -61,7 +63,7 @@ class SnwkEvent {
     }
 
     static constraints = {
-        token blank: false, size: 1..254, unique: true
+        token blank: false, size: 1..254, unique: ['localProfile']
         datum nullable: true, blank: false
         plats nullable: true, blank: false
         organisation nullable: true, blank: false

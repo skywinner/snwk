@@ -17,7 +17,7 @@ class SnwkControllerSpec extends Specification implements ControllerUnitTest<Snw
         controller.snwkService = Mock(SnwkService) {
             1 * listLocalProfiles() >> ['user1', 'user2']
             1 * getLocalProfileByName(_) >> new LocalProfile(profileName: 'username', profileSettings: '{"tsm_elit": true}')
-            1 * getEvents(_, _) >> aList
+            1 * getEvents(_, _, _) >> aList
         }
 
         when: 'The index action is executed'
