@@ -1,11 +1,4 @@
 <%@ page import="snwk.SnwkEvent" %>
-<div>
-    <label class="layout-invisible" for="filter"></label>
-    <input id="filter" type="search" autofocus class="light-table-filter form-control mousetrap"
-           data-table="listTable"
-           placeholder='<g:message code="placeholder.filter" args="[clubList?.size()]"/>'>
-</div>
-
 <table class="listTable table table-sm">
     <thead>
     <tr class="table-active">
@@ -14,7 +7,7 @@
         <th style="border-bottom-width: 0 !important;">Anm</th>
         <th style="border-bottom-width: 0 !important;">Plats</th>
         <th style="border-bottom-width: 0 !important;" class="d-none d-sm-block">Arrangör</th>
-        <th style="border-bottom-width: 0 !important;>" Klass</th>
+        <th style="border-bottom-width: 0 !important;>">Klass</th>
         <th style="border-bottom-width: 0 !important;">Moment</th>
         <th style="border-bottom-width: 0 !important;">Anmälan</th>
     </tr>
@@ -24,7 +17,8 @@
     <g:each in="${allList}" status="i" var="row">
         <tr class="${row.selected ? 'table-success' : ''}">
 
-            <td>${row.datum}</td>
+            <td><span class="d-none d-sm-block">${row.datum}</span>
+                <span class="d-sm-none">${row.datum.substring(5)}</span></td>
             <td><g:checkBox class="showCheck" name="show_${row.token}" id="show_${row.token}"
                             value="${row.show}"/></td>
             <td><g:checkBox class="selectedCheck" name="selected_${row.token}" id="selected_${row.token}"
@@ -42,6 +36,11 @@
         </tr>
 
     </g:each>
+    <g:if test="${allList.size() > 0}">
+        <tr>
+            <td>${allList.size()} st</td>
+        </tr>
+    </g:if>
 
     </tbody>
 </table>

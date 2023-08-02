@@ -30,7 +30,7 @@ function addClickListeners() {
                 momentSel.prop('checked', true);
             }
         }
-        console.log('clicked on klass: ' + this.name + ' is selected: ' + selected.toString());
+        //console.log('clicked on klass: ' + this.name + ' is selected: ' + selected.toString());
 
         let ajaxUrl = updateProfileUrl; //Set in the head of GSP
         const profileName = $('#profile').val();
@@ -46,6 +46,15 @@ function addClickListeners() {
         updateProfile(ajaxUrl, profileName, '', name, selected);
     });
 
+    $('#profile').on('change', function () {
+        const profileName = $('#profile').val();
+        reLoadMeWithProfile(profileName);
+    });
+
+    addClickListenersTable();
+}
+
+function addClickListenersTable() {
     $('.showCheck').on('click', function () {
         const name = this.name;
         const selected = $('#' + name).prop('checked');
@@ -65,19 +74,14 @@ function addClickListeners() {
         let ajaxUrl = setSelectedUrl; //Set in the head of GSP
         setSelected(ajaxUrl, token, selected);
     });
-
-    $('#profile').on('change', function () {
-        const profileName = $('#profile').val();
-        reLoadMeWithProfile(profileName);
-    });
 }
 
 function enableDisableSelections(profileName) {
     if (profileName.toString() === 'null') {
-        console.log('DISABLING selections');
+        //console.log('DISABLING selections');
         setDisabled(true);
     } else {
-        console.log('enabling selections for ' + profileName);
+        //console.log('enabling selections for ' + profileName);
         setDisabled(false);
     }
 }
@@ -117,13 +121,13 @@ function setSelected(ajaxUrl, token, selected) {
                 // Only act if something has been updated
                 if (resp.length > 0) {
                     $("#content").html(resp);
+                    $("#filter").val('');
                 }
                 setDisabled(false);
-                addClickListeners();
+                addClickListenersTable();
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 console.log('Could not set Selected ' + xhr.status.toString());
-                //showError(xhr, ajaxOptions, thrownError);
             }
         });
     }
@@ -145,13 +149,13 @@ function updateProfile(ajaxUrl, profileName, moment, klass, selected) {
                 // Only act if something has been updated
                 if (resp.length > 0) {
                     $("#content").html(resp);
+                    $("#filter").val('');
                 }
                 setDisabled(false);
-                addClickListeners();
+                addClickListenersTable();
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 console.log('Could not update Profile ' + xhr.status.toString());
-                //showError(xhr, ajaxOptions, thrownError);
             }
         });
     }

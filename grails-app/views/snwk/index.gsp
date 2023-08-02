@@ -52,6 +52,13 @@
     </div>
 </div>
 
+<div>
+    <label class="layout-invisible" for="filter"></label>
+    <input id="filter" type="search" autofocus class="light-table-filter form-control mousetrap"
+           data-table="listTable"
+           placeholder='<g:message code="placeholder.filter" args="[clubList?.size()]"/>'>
+</div>
+
 <div id="content" role="main">
     <g:render template="/layouts/index_table"/>
 </div>
