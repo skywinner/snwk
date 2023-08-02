@@ -14,7 +14,7 @@ class SnwkServiceSpec extends Specification {
 
     SnwkService snwkService
 
-    private LocalProfile setupData() {
+    private static LocalProfile setupData() {
         new LocalProfile(profileName: 'user1', profileSettings: '{"tsm_elit": true}').save(failOnError: true)
         LocalProfile lp = new LocalProfile(profileName: 'user2', profileSettings: '{"tsm_elit": false}').save(failOnError: true, flush: true)
         new SnwkEvent(localProfile:lp, token: StringUtil.randomString(12),

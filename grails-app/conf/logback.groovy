@@ -28,7 +28,7 @@ appender('STDOUT', ConsoleAppender) {
 }
 
 def targetDir = BuildSettings.TARGET_DIR
-if (targetDir != null) {
+if (targetDir != null && Environment.current.name != "test") {
     println "TARGET_DIR for stacktrace.log=${targetDir}"
     appender("FULL_STACKTRACE", FileAppender) {
         if (Environment.isDevelopmentMode()) {
