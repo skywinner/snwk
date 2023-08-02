@@ -17,9 +17,9 @@ class LocalProfileSpec extends Specification implements DomainUnitTest<LocalProf
         LocalProfile localProfile = setup()
 
         when: 'checkMap is extracted'
-        Map checkMap = localProfile.checkMap
+        def checkMap = localProfile.checkMap
 
-        then: 'is contains the correct data'
+        then: 'it contains the correct data'
         !checkMap['tsm_nw1']
         checkMap['tsm_nw2']
         checkMap['tsm_nw3']
@@ -34,4 +34,27 @@ class LocalProfileSpec extends Specification implements DomainUnitTest<LocalProf
         checkMap['utomhus_nw3']
     }
 
+    void "checkMap can be null"() {
+        given: 'a profile with nullified settings'
+        LocalProfile localProfile = setup()
+        localProfile.profileSettings = null
+
+        when: 'checkMap is extracted'
+        def checkMap = localProfile.checkMap
+
+        then: 'it works, but empty result'
+        checkMap.size() == 0
+    }
+
+    void "checkMap can be blank"() {
+        given: 'a profile with blank settings'
+        LocalProfile localProfile = setup()
+        localProfile.profileSettings = ''
+
+        when: 'checkMap is extracted'
+        def checkMap = localProfile.checkMap
+
+        then: 'it works, but empty result'
+        checkMap.size() == 0
+    }
 }

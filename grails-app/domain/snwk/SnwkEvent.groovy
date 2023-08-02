@@ -33,8 +33,8 @@ class SnwkEvent {
     String anmalanLink
     String lan
 
-    Date dateCreated = new Date()
-    Date lastUpdated
+    java.sql.Date dateCreated = DateUtil.currentDate()
+    java.sql.Date lastUpdated
 
     static belongsTo = [localProfile: LocalProfile]
 
@@ -77,8 +77,13 @@ class SnwkEvent {
         lan nullable: true, blank: false
     }
 
+    static mapping = {
+        show defaultValue: true, column: 'is_shown'
+        selected defaultValue: false, column: 'is_selected'
+    }
+
     def beforeUpdate() {
-        lastUpdated = new Date()
+        lastUpdated = DateUtil.currentDate()
     }
 
 }

@@ -10,7 +10,7 @@ buildscript {
     }
 }
 
-version "0.1"
+version "1.0"
 group "snwk"
 
 apply plugin:"eclipse"
@@ -60,6 +60,7 @@ dependencies {
     profile "org.grails.profiles:web"
     runtime "org.glassfish.web:el-impl:2.1.2-b03"
     runtime "com.h2database:h2"
+    runtime "mysql:mysql-connector-java:8.0.28"
     runtime "org.apache.tomcat:tomcat-jdbc"
     runtime "javax.xml.bind:jaxb-api:2.3.1"
     runtime "com.bertramlabs.plugins:asset-pipeline-grails:3.2.4"
@@ -107,6 +108,6 @@ tasks.withType(Test) {
 
 
 assets {
-    minifyJs = true
+    minifyJs = false
     minifyCss = true
 }

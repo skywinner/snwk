@@ -112,6 +112,8 @@ spring:
 
 environments:
   development:
+    grails:
+      serverURL: http://79.142.214.133:60080/
     dataSource:
       dbCreate: update
       url: jdbc:h2:file:~/dev/snwk/devDb;
@@ -124,13 +126,18 @@ environments:
       dbCreate: update
       url: jdbc:h2:mem:testDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
   production:
+    grails:
+      serverURL: https://snwk.skywin.se/snwk
     dataSource:
-      dbCreate: none
-      url: jdbc:h2:./prodDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
+      dbCreate: update
+      url:  jdbc:mysql://127.0.0.1/snwk
+      username: snwk
+      password: snwk
+      driverClassName: com.mysql.cj.jdbc.Driver
       properties:
         jmxEnabled: true
         initialSize: 5
-        maxActive: 50
+        maxActive: 100
         minIdle: 5
         maxIdle: 25
         maxWait: 10000
@@ -145,3 +152,5 @@ environments:
         testOnReturn: false
         jdbcInterceptors: ConnectionState
         defaultTransactionIsolation: 2 # TRANSACTION_READ_COMMITTED
+        removeAbandoned: true
+        removeAbandonedTimeout: 60

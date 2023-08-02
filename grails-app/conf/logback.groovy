@@ -19,13 +19,24 @@ appender('STDOUT', ConsoleAppender) {
                         '%clr(---){faint} %clr([%15.15t]){faint} ' + // Thread
                         '%clr(%-40.40logger{39}){cyan} %clr(:){faint} ' + // Logger
                         '%m%n%wex' // Message
+        pattern =
+                '%clr(%d{ISO8601}){faint} ' + // Date
+                        '%clr(%-5p) ' + // Log level
+                        '%clr(%c{1}){cyan} %clr(-){faint} ' + // Logger
+                        '%m%n%wex' // Message
     }
 }
 
 def targetDir = BuildSettings.TARGET_DIR
-if (Environment.isDevelopmentMode() && targetDir != null) {
+if (targetDir != null) {
+    println "TARGET_DIR for stacktrace.log=${targetDir}"
     appender("FULL_STACKTRACE", FileAppender) {
-        file = "${targetDir}/stacktrace.log"
+        if (Environment.isDevelopmentMode()) {
+            file = "${targetDir}/stacktrace.log"
+        } else {
+            file = "/var/log/tomcat9/snwk_stacktrace.log"
+
+        }
         append = true
         encoder(PatternLayoutEncoder) {
             charset = StandardCharsets.UTF_8
@@ -34,4 +45,7 @@ if (Environment.isDevelopmentMode() && targetDir != null) {
     }
     logger("StackTrace", ERROR, ['FULL_STACKTRACE'], false)
 }
+logger("snwk", INFO)
+logger("groovy.sql", INFO)
+
 root(ERROR, ['STDOUT'])
