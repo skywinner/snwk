@@ -14,7 +14,7 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col input-container">
+        <div style="margin-bottom: 0 !important;" class="col input-container">
             <div>
                 <span><g:select id="profile" name="profile" from="${profileList*.profileName}"
                                 style="width: 100px;"
@@ -52,7 +52,7 @@
     </div>
 </div>
 
-<div>
+<div class="d-none d-sm-block">
     <label class="layout-invisible" for="filter"></label>
     <input id="filter" type="search" autofocus class="light-table-filter form-control mousetrap"
            data-table="listTable"
