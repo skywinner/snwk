@@ -47,7 +47,7 @@
         </div>
 
         <div class="col-sm-5 d-none d-lg-block logo-container">
-            <asset:image class="logo" src="Logotype-SNWK.jpg"/>
+            <asset:image class="logo" src="Logotype-SNWK.jpg" alt="SNWK logotype"/>
         </div>
     </div>
 </div>

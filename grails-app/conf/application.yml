@@ -113,7 +113,7 @@ spring:
 environments:
   development:
     grails:
-      serverURL: http://79.142.214.133:60080/
+      serverURL: http://188.149.186.134:60080/
     dataSource:
       dbCreate: update
       url: jdbc:h2:file:~/dev/snwk/devDb;

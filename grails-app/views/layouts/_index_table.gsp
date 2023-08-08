@@ -45,7 +45,8 @@
     </g:each>
     <g:if test="${allList.size() > 0}">
         <tr>
-            <td>${allList.size()} st</td>
+            <td colspan="8" class="d-none d-sm-table-cell">${allList.size()} st</td>
+            <td colspan="6" class="d-sm-none">${allList.size()} st</td>
         </tr>
     </g:if>
 
