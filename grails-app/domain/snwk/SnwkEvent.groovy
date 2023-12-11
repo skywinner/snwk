@@ -69,7 +69,7 @@ class SnwkEvent {
         organisation nullable: true, blank: false
         domare nullable: true, blank: false
         klass inList: ['NW1', 'NW2', 'NW3', 'ELIT']
-        moment inList: ['tsm', 'inomhus', 'utomhus', 'behallare', 'fordon']
+        moment inList: ['tsm', 'inomhus', 'utomhus', 'behallare', 'fordon', 'doftprov']
         anmalanStart nullable: true, blank: false
         anmalanSlut nullable: true, blank: false
         anmalanTyp nullable: true, blank: false

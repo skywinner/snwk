@@ -39,7 +39,7 @@ class SnwkController {
 
         if (localProfile) {
             localProfile.checkMap.each {
-                if (!['tsm', 'inomhus', 'utomhus', 'behallare', 'fordon', 'showAll', 'hideSelected'].contains(it.key)) {
+                if (!['tsm', 'inomhus', 'utomhus', 'behallare', 'fordon','doftprov', 'showAll', 'hideSelected'].contains(it.key)) {
                     if (it.value) {
                         String moment = it.key.toString().split('_')[0]
                         String klass = it.key.toString().split('_')[1].toUpperCase()

@@ -44,6 +44,9 @@
             <g:set var="moment" value="fordon"/>
             <g:render template="/layouts/inputRow" bean="checkMap"/>
 
+            <g:set var="moment" value="doftprov"/>
+            <g:render template="/layouts/inputRow" bean="checkMap"/>
+
         </div>
 
         <div class="col-sm-5 d-none d-lg-block logo-container">
