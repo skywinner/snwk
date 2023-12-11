@@ -50,7 +50,7 @@ class SnwkService {
         def list = []
 
         try {
-            HttpRequest request = HttpRequest.GET(UriBuilder.of('/?page=kalendarium')
+            HttpRequest request = HttpRequest.GET(UriBuilder.of((moment == 'doftprov' ? '/?page=kalendarium&type=DP' : '/?page=kalendarium'))
                     .queryParam('klass', klass)
                     .queryParam('typ', moment)
                     .build())
