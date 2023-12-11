@@ -57,12 +57,15 @@ class SnwkService {
 
             HttpResponse<String> response = httpClient.toBlocking().exchange(request, String)
             String html = response.body()
-            def eventList = html.split('<li ')
+            def eventList = html.split('<div class="infolist cal list" ')
+            if (eventList.size() < 1) {
+                log.warn('No events found')
+            }
             eventList.eachWithIndex { it, idx ->
                 if (idx != 0) {
 
                     // Token
-                    String token = extractBetween(it, 'token=', "'")
+                    String token = extractBetween(it, 'id="', '"')
 
                     // Store or update values - id is PROFILE and TOKEN
                     SnwkEvent se = getSnwkEventByProfileAndToken(localProfile, token)
@@ -91,7 +94,11 @@ class SnwkService {
                     se.anmalanStart = extractBetween(it, 'Anmälan är öppen från ', ' till ')
 
                     // Anmälan stänger
-                    se.anmalanSlut = extractBetween(it, ' till och med ', '</p>')
+                    if (it.contains(' förlängd till ')) {
+                        se.anmalanSlut = extractBetween(it, ' förlängd till ', '</p>')
+                    } else {
+                        se.anmalanSlut = extractBetween(it, ' till och med ', '</p>')
+                    }
 
                     // Typ av anmälan
                     String anmalanTyp = extractBetween(it, '<p class="style4">', '</p>')
@@ -105,7 +112,7 @@ class SnwkService {
                     // Länk till anmälan
                     se.anmalanLink = null
                     if (se.isAnmalanOpen) {
-                        se.anmalanLink = BASE_URL + '/' + extractBetween(it, '<button class="anmalbutton" onclick="location=\'', "'")
+                        se.anmalanLink = BASE_URL + '/' + extractBetween(it, '<button class="anmalbutton anmal_button" onclick="location=\'', "'")
                     }
 
                     // Län
