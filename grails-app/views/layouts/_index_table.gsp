@@ -4,8 +4,8 @@
     <thead>
     <tr class="table-active">
         <th style="border-bottom-width: 0 !important;">Datum</th>
-        <th style="border-bottom-width: 0 !important;">Visa</th>
-        <th style="border-bottom-width: 0 !important;">Anm</th>
+        <th style="border-bottom-width: 0 !important;">Intresserad</th>
+        <th style="border-bottom-width: 0 !important;">Anmäld</th>
         <th style="border-bottom-width: 0 !important;">Plats</th>
         <th style="border-bottom-width: 0 !important;" class="d-none d-sm-table-cell">Arrangör</th>
         <th style="border-bottom-width: 0 !important;" class="d-none d-sm-table-cell">Klass</th>

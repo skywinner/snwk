@@ -24,12 +24,12 @@ function addClickListeners() {
         const selected = $('#' + klass).prop('checked');
         const moment = klass.split('_')[0]
 
-        if (selected) {
+        /* if (selected) {
             let momentSel = $('#' + moment);
             if (!momentSel.prop('checked')) {
                 momentSel.prop('checked', true);
             }
-        }
+        } */
         //console.log('clicked on klass: ' + this.name + ' is selected: ' + selected.toString());
 
         let ajaxUrl = updateProfileUrl; //Set in the head of GSP

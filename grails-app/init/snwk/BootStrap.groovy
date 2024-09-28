@@ -12,7 +12,7 @@ class BootStrap {
 
             lp = new LocalProfile()
             lp.profileName = 'Jesper'
-            lp.profileSettings = '{"tsm_nw3":false,"behallare_nw1":true,"tsm_elit":true,"utomhus_nw1":true,"inomhus_nw2":true,"inomhus_nw3":true,"fordon_nw1":true,"nw3_doftprov":true}'
+            lp.profileSettings = '{"tsm_elit":true}'
             lp.save failOnError: true
         }
     }

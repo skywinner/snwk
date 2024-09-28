@@ -46,11 +46,10 @@ class SnwkService {
 
     def getEvents(LocalProfile localProfile, String klass, String moment) {
         boolean showAll = localProfile.checkMap['showAll'] ?: false
-        boolean hideSelected = localProfile.checkMap['hideSelected'] ?: false
         def list = []
 
         try {
-            HttpRequest request = HttpRequest.GET(UriBuilder.of((moment == 'doftprov' ? '/?page=kalendarium&type=DP' : '/?page=kalendarium'))
+            HttpRequest request = HttpRequest.GET(UriBuilder.of('/?page=kalendarium')
                     .queryParam('klass', klass)
                     .queryParam('typ', moment)
                     .build())
@@ -126,7 +125,7 @@ class SnwkService {
 
                     se.save failOnError: true
 
-                    if ((se.show || showAll) && (!se.selected || !hideSelected)) {
+                    if (se.show || showAll) {
                         list.push(se)
                     }
                 }

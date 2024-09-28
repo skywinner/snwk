@@ -24,9 +24,9 @@
                 <span><g:checkBox class="settingCheck" checked="${checkMap['showAll']}" name="showAll"/>&nbsp;<g:message
                         code="nose.work.showAll.label" default="showAll"/>
                 </span>
-                <span><g:checkBox class="settingCheck" checked="${checkMap['hideSelected']}"
-                                  name="hideSelected"/>&nbsp;<g:message
-                        code="nose.work.hideSelected.label" default="hideSelected"/></span>
+                <span><g:checkBox class="settingCheck" checked="${checkMap['showScentTest']}"
+                                  name="showScentTest"/>&nbsp;<g:message
+                        code="nose.work.showScentTest.label" default="showScentTest"/></span>
             </div>
 
             <g:set var="moment" value="tsm"/>
@@ -44,7 +44,7 @@
             <g:set var="moment" value="fordon"/>
             <g:render template="/layouts/inputRow" bean="checkMap"/>
 
-            <g:set var="moment" value="doftprov"/>
+            <g:set var="moment" value="inoff"/>
             <g:render template="/layouts/inputRow" bean="checkMap"/>
 
         </div>

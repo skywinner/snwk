@@ -38,8 +38,18 @@ class SnwkController {
         ArrayList allList = []
 
         if (localProfile) {
+            boolean showScentTest = localProfile.checkMap['showScentTest'] ?: false
+            if (showScentTest) {
+                String moment = 'doftprov'
+                String klass = 'NW1'
+                allList += snwkService.getEvents(localProfile, klass, moment)
+                klass = 'NW2'
+                allList += snwkService.getEvents(localProfile, klass, moment)
+                klass = 'NW3'
+                allList += snwkService.getEvents(localProfile, klass, moment)
+            }
             localProfile.checkMap.each {
-                if (!['tsm', 'inomhus', 'utomhus', 'behallare', 'fordon','doftprov', 'showAll', 'hideSelected'].contains(it.key)) {
+                if (!['tsm', 'inomhus', 'utomhus', 'behallare', 'fordon', 'doftprov', 'inoff', 'showAll', 'showScentTest'].contains(it.key)) {
                     if (it.value) {
                         String moment = it.key.toString().split('_')[0]
                         String klass = it.key.toString().split('_')[1].toUpperCase()
